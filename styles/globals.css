@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🌟 Theme Variables */
+:root {
+  --color-primary: #000000; /* Black */
+  --color-secondary: #ffffff; /* White */
+  --color-border: #000000; /* Black border */
+  --color-background: #ffffff; /* White background */
+  --radius-md: 12px; /* Global Border Radius */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #ffffff; /* White text */
+    --color-secondary: #000000; /* Black background */
+    --color-border: #ffffff; /* White border */
+    --color-background: #000000; /* Dark mode background */
+  }
+}
+
+/* 🌟 Global Styles */
+body {
+  @apply bg-white text-black;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-primary);
+}
+
+/* 🌟 Forms */
+input,
+textarea,
+select {
+  @apply border border-gray-300 px-4 py-2 w-full;
+  border-radius: var(--radius-md) !important;
+  transition: border 0.2s ease-in-out !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  @apply border-black outline-none !important;
+}
+
+/* 🌟 Buttons */
+button {
+  @apply px-4 py-2 font-medium transition-all;
+  border-radius: var(--radius-md) !important;
+}
+.btn {
+  @apply px-4 py-2 font-medium transition-all;
+  border-radius: var(--radius-md) !important;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  border: 2px solid var(--color-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border: 2px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+}
+
+/* 🌟 Utility */
+.container {
+  @apply max-w-4xl;
+}
+
+.border{
+  border-radius: 12px !important;
+}
