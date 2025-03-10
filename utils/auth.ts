@@ -1,21 +1,17 @@
-// utils/auth.ts
-
+// /utils/auth.ts
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
+import { jwt, admin, organization, magicLink } from "better-auth/plugins"; 
 import { MysqlDialect } from "kysely";
 import { createPool } from "mysql2/promise";
 import Database from "better-sqlite3";
 import { SqliteDialect } from "kysely";
-import { sendEmail } from "./email"; // Ensure this path points to your email utility
+import { sendEmail } from "./emails";
 
-// Detect if we're in production
 const isProduction = process.env.NODE_ENV === "production";
 
-// Create a dialect for either MySQL or SQLite
 let dialect;
-
 if (isProduction) {
-  // --- PRODUCTION (MySQL) ---
   dialect = new MysqlDialect({
     pool: createPool({
       host: process.env.MYSQL_HOST,
@@ -25,48 +21,68 @@ if (isProduction) {
     }),
   });
 } else {
-  // --- LOCAL (SQLite) ---
   dialect = new SqliteDialect({
     database: new Database("./sqlite.db"),
   });
 }
 
 export const auth = betterAuth({
-  // Database configuration using the correct dialect
   database: {
     dialect,
     type: isProduction ? "mysql" : "sqlite",
   },
-
-  // Required secrets/URLs
   secret: process.env.BETTER_AUTH_SECRET,
   url: process.env.BETTER_AUTH_URL,
-
-  // Enable Email/Password authentication with email verification requirement
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
-    // Function to send reset password email
     sendResetPassword: async ({ user, url, token }, request) => {
       await sendEmail({
         to: user.email,
         subject: "Reset Your Password",
-        text: `You requested a password reset. Click the following link to reset your password: ${url}`,
+        text: `You requested a password reset. Click the link to reset your password: ${url}`,
       });
     },
   },
-
-  // Function to send a verification email during sign-up or when required
   emailVerification: {
     sendVerificationEmail: async ({ user, url, token }, request) => {
       await sendEmail({
         to: user.email,
         subject: "Verify Your Email Address",
-        text: `Thank you for signing up! Please verify your email address by clicking the following link: ${url}`,
+        text: `Thank you for signing up! Please verify your email by clicking this link: ${url}`,
       });
     },
   },
-
-  // Automatically set cookies for Next.js
-  plugins: [nextCookies()],
+  plugins: [
+    jwt(),
+    admin({
+      adminRole: ["admin", "superAdmin"],
+      defaultRole: "user",
+      impersonationSessionDuration: 60 * 60 * 24, // 1 day
+      defaultBanReason: "No reason",
+      defaultBanExpiresIn: undefined,
+    }),
+    organization({
+      async sendInvitationEmail(data) {
+        const inviteLink = `${process.env.NEXT_PUBLIC_BASE_URL}/invite/${data.id}`;
+        await sendEmail({
+          to: data.email,
+          subject: "You've been invited to join an organization",
+          text: `Hello!\n\nYou have been invited by ${data.inviter.user.name} (${data.inviter.user.email})\nto join the organization "${data.organization.name}".\n\nPlease click the following link to accept the invitation:\n${inviteLink}\n\nIf you did not expect this invitation, please ignore this email.`,
+        });
+        console.log("Invitation email sent with link:", inviteLink);
+      },
+    }),
+    magicLink({
+      sendMagicLink: async ({ email, token, url }, request) => {
+        await sendEmail({
+          to: email,
+          subject: "Your Magic Link",
+          text: `Click this link to log in and accept your invitation: ${url}`,
+        });
+      },
+      expiresIn: 300, // 5 minutes
+    }),
+    nextCookies(),
+  ],
 });

@@ -1,33 +1,70 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { TextInput, Divider } from '@tremor/react';
-import { authClient } from '@/utils/auth-client';
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { TextInput, Divider } from "@tremor/react";
+import { authClient } from "@/utils/auth-client";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const invitationId = searchParams.get("invitationId");
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setErrorMessage('');
     setLoading(true);
 
     try {
-      await authClient.signIn.email({
-        body: {
-          email,
-          password,
-        },
+      // Check if user exists
+      const userCheck = await fetch(`/api/check-user?email=${encodeURIComponent(email)}`, {
+        method: "GET",
       });
-      // On successful login, you might redirect the user:
-      // router.push('/dashboard');
-      alert('Login successful!');
-    } catch (error: any) {
-      console.error('Login error:', error);
-      setErrorMessage(error?.message || 'Error logging in. Please try again.');
+
+      if (!userCheck.ok) {
+        throw new Error("Failed to check user existence. Please try again.");
+      }
+
+      const { exists } = await userCheck.json();
+      if (!exists) {
+        setEmailError("This email is not registered in our system.");
+        setLoading(false);
+        return;
+      }
+
+      // Attempt sign-in
+      const { data, error } = await authClient.signIn.email({ email, password });
+      if (error) throw error; // Throw error to catch block if sign-in fails
+
+      // Handle invitation or redirect
+      if (invitationId) {
+        router.push(`/accept-invite?invitationId=${invitationId}`);
+      } else {
+        // Redirect to organization onboarding where tenant creation will happen
+        router.push("/dashboard");
+      }
+    } catch (err) {
+      console.log("Login error:", err); // Log the error to inspect its structure
+
+      // Reset previous error states
+      setEmailError("");
+      setPasswordError("");
+      setErrorMessage("");
+
+      // Handle invalid credentials
+      if (err.status === 401 || err.message?.includes("Invalid email or password")) {
+        setPasswordError("Incorrect password.");
+      } else if (err.status === 403 || err.message?.toLowerCase().includes("verify")) {
+        setEmailError("Please verify your email address before logging in.");
+      } else {
+        setErrorMessage(err.message || "Error logging in. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -61,6 +98,7 @@ export default function LoginForm() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
           </div>
           <div>
             <label
@@ -80,20 +118,19 @@ export default function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
           </div>
-          {errorMessage && (
-            <p className="text-red-500 text-sm">{errorMessage}</p>
-          )}
+          {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
           <button
             type="submit"
             disabled={loading}
             className="btn-primary mt-4 w-full whitespace-nowrap rounded-tremor-default bg-tremor-brand py-2 text-center text-tremor-default font-medium text-tremor-brand-inverted shadow-tremor-input hover:bg-tremor-brand-emphasis dark:bg-dark-tremor-brand dark:text-dark-tremor-brand-inverted dark:shadow-dark-tremor-input dark:hover:bg-dark-tremor-brand-emphasis"
           >
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
         <p className="mt-6 text-sm text-gray-600 text-center dark:text-dark-tremor-content">
-          Forgot your password?{' '}
+          Forgot your password?{" "}
           <a
             href="/forgot-password"
             className="font-medium text-tremor-brand hover:text-tremor-brand-emphasis dark:text-dark-tremor-brand dark:hover:text-dark-tremor-brand-emphasis"
@@ -101,14 +138,15 @@ export default function LoginForm() {
             Reset password
           </a>
         </p>
-        <div class="mx-auto my-6 flex w-full items-center justify-between gap-3 text-sm text-gray-500 dark:text-gray-500" tremor-id="tremor-raw"><div class="h-[1px] w-full bg-gray-200 dark:bg-gray-800"></div><div class="whitespace-nowrap text-inherit">or</div><div class="h-[1px] w-full bg-gray-200 dark:bg-gray-800"></div></div>
-        <p className="mt-2  text-sm text-gray-600 text-center dark:text-dark-tremor-content">            Don't have an account?{' '}            
-          <a              
-          href="/signup"              
-          className="font-medium text-tremor-brand hover:text-tremor-brand-emphasis dark:text-dark-tremor-brand hover:dark:text-dark-tremor-brand-emphasis"            
-          >              
-          Sign up            
-          </a>          
+        <Divider className="my-6" />
+        <p className="mt-2 text-sm text-gray-600 text-center dark:text-dark-tremor-content">
+          Don’t have an account?{" "}
+          <a
+            href="/signup"
+            className="font-medium text-tremor-brand hover:text-tremor-brand-emphasis dark:text-dark-tremor-brand dark:hover:text-dark-tremor-brand-emphasis"
+          >
+            Sign up
+          </a>
         </p>
       </div>
     </div>

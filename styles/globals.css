@@ -83,3 +83,14 @@ button {
 .border{
   border-radius: 12px !important;
 }
+
+/* In your global CSS file (e.g., globals.css) or in a styled-jsx block */
+.select-role span{
+  display: inline-block;
+  width: 100%;
+}
+
+.tremor-Select-arrowDownIcon {
+  opacity: 0 !important;
+  width: 100%;  
+}

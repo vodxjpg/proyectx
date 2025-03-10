@@ -1,9 +1,28 @@
-// lib/auth-client.ts
-
+// /utils/auth-client.ts
 import { createAuthClient } from "better-auth/react";
+import { adminClient, organizationClient, magicLinkClient } from "better-auth/client/plugins";
+import {
+  ac,
+  ownerRole,
+  managerRole,
+  accountantRole,
+  employeeRole,
+} from "@/utils/permissions";
 
 export const authClient = createAuthClient({
-  // Optionally specify baseURL if needed. 
-  // If your API is the same domain, you can omit it.
-  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3001",
+  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
+  plugins: [
+    adminClient(),
+    organizationClient({
+      ac,
+      roles: {
+        owner: ownerRole,
+        manager: managerRole,
+        accountant: accountantRole,
+        employee: employeeRole,
+      },
+      teams: { enabled: true },
+    }),
+    magicLinkClient(),
+  ],
 });

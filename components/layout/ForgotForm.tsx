@@ -5,6 +5,10 @@ import { TextInput } from '@tremor/react';
 import { authClient } from '@/utils/auth-client';
 
 export default function ForgotForm() {
+  // For demonstration, we use a constant tenantId.
+  // In production, derive this value dynamically.
+  const tenantId = "default_tenant";
+
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -18,6 +22,7 @@ export default function ForgotForm() {
 
     try {
       await authClient.forgetPassword({
+        tenantId, // Passing the tenantId for multi-tenancy
         email,
         redirectTo: '/reset-password', // Adjust as needed
       });

@@ -23,10 +23,10 @@ export default function LandingHeader() {
         </div>
         <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 mt-4 md:mt-0">
           <button className="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition w-full md:w-auto">
-            Sign in
+            <a href="/login">Sign in</a>
           </button>
           <button className="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition w-full md:w-auto">
-            Create an account
+            <a href="/signup">Create an account</a>
           </button>
         </div>
       </nav>

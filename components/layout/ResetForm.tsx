@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { TextInput } from '@tremor/react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { authClient } from '@/utils/auth-client';
 
 export default function ResetForm() {
@@ -12,9 +12,9 @@ export default function ResetForm() {
   const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Get the token from the URL query string.
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
+  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,12 +41,15 @@ export default function ResetForm() {
     setLoading(true);
 
     try {
-      // Call Better Auth's resetPassword function.
       await authClient.resetPassword({
         newPassword: password,
         token,
       });
-      setSuccessMessage('Password reset successful! You can now log in with your new password.');
+      setSuccessMessage('Password reset successful! Redirecting to login...');
+      // Redirect to the login page after a short delay
+      setTimeout(() => {
+        router.push('/login');
+      }, 1500);
     } catch (error: any) {
       console.error('Reset password error:', error);
       setErrorMessage(error?.message || 'Error resetting password. Please try again.');

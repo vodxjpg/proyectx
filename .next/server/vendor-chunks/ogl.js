@@ -71,6 +71,16 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "(ssr)/./node_modules/ogl/src/extras/Triangle.js":
+/*!*************************************************!*\
+  !*** ./node_modules/ogl/src/extras/Triangle.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   Triangle: () => (/* binding */ Triangle)\n/* harmony export */ });\n/* harmony import */ var _core_Geometry_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core/Geometry.js */ \"(ssr)/./node_modules/ogl/src/core/Geometry.js\");\n\n\nclass Triangle extends _core_Geometry_js__WEBPACK_IMPORTED_MODULE_0__.Geometry {\n    constructor(gl, { attributes = {} } = {}) {\n        Object.assign(attributes, {\n            position: { size: 2, data: new Float32Array([-1, -1, 3, -1, -1, 3]) },\n            uv: { size: 2, data: new Float32Array([0, 0, 2, 0, 0, 2]) },\n        });\n\n        super(gl, attributes);\n    }\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvb2dsL3NyYy9leHRyYXMvVHJpYW5nbGUuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBK0M7O0FBRXhDLHVCQUF1Qix1REFBUTtBQUN0QyxzQkFBc0Isa0JBQWtCLElBQUk7QUFDNUM7QUFDQSx3QkFBd0IseURBQXlEO0FBQ2pGLGtCQUFrQixxREFBcUQ7QUFDdkUsU0FBUzs7QUFFVDtBQUNBO0FBQ0EiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly90cmFwaWdyYW0vLi9ub2RlX21vZHVsZXMvb2dsL3NyYy9leHRyYXMvVHJpYW5nbGUuanM/YTA1OSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBHZW9tZXRyeSB9IGZyb20gJy4uL2NvcmUvR2VvbWV0cnkuanMnO1xuXG5leHBvcnQgY2xhc3MgVHJpYW5nbGUgZXh0ZW5kcyBHZW9tZXRyeSB7XG4gICAgY29uc3RydWN0b3IoZ2wsIHsgYXR0cmlidXRlcyA9IHt9IH0gPSB7fSkge1xuICAgICAgICBPYmplY3QuYXNzaWduKGF0dHJpYnV0ZXMsIHtcbiAgICAgICAgICAgIHBvc2l0aW9uOiB7IHNpemU6IDIsIGRhdGE6IG5ldyBGbG9hdDMyQXJyYXkoWy0xLCAtMSwgMywgLTEsIC0xLCAzXSkgfSxcbiAgICAgICAgICAgIHV2OiB7IHNpemU6IDIsIGRhdGE6IG5ldyBGbG9hdDMyQXJyYXkoWzAsIDAsIDIsIDAsIDAsIDJdKSB9LFxuICAgICAgICB9KTtcblxuICAgICAgICBzdXBlcihnbCwgYXR0cmlidXRlcyk7XG4gICAgfVxufVxuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/ogl/src/extras/Triangle.js\n");
+
+/***/ }),
+
 /***/ "(ssr)/./node_modules/ogl/src/math/Euler.js":
 /*!********************************************!*\
   !*** ./node_modules/ogl/src/math/Euler.js ***!

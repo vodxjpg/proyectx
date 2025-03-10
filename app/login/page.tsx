@@ -34,7 +34,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right Column - Signup Form */}
+      {/* Right Column - Login Form */}
       <div className="flex w-full lg:w-1/2 items-center justify-center px-6 py-10">
         <div className="sm:w-full sm:max-w-md">
           <LoginForm />
