@@ -41,7 +41,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         )
       )}
 
-      <main className="flex-grow">
+      <main className="flex-grow py-16">
         {children}
       </main>
 

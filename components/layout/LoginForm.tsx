@@ -23,7 +23,7 @@ export default function LoginForm() {
 
     try {
       // Check if user exists
-      const userCheck = await fetch(`/api/check-user?email=${encodeURIComponent(email)}`, {
+      const userCheck = await fetch(`/api/user/check?email=${encodeURIComponent(email)}`, {
         method: "GET",
       });
 
@@ -47,7 +47,7 @@ export default function LoginForm() {
         router.push(`/accept-invite?invitationId=${invitationId}`);
       } else {
         // Redirect to organization onboarding where tenant creation will happen
-        router.push("/dashboard");
+        router.push("/select-organization");
       }
     } catch (err) {
       console.log("Login error:", err); // Log the error to inspect its structure

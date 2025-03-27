@@ -14,8 +14,9 @@ interface Step {
 }
 
 const steps: Step[] = [
-  { name: "Organization", href: "/onboarding/organization" }, // Now first
+  { name: "Organization", href: "/onboarding/organization" },
   { name: "Bot keys", href: "/onboarding/bot-keys" },
+  { name: "Selling Countries", href: "/onboarding/selling-countries" },
   { name: "Support email", href: "/onboarding/support-email" },
   { name: "Secret phrase", href: "/onboarding/secret-phrase" },
 ];

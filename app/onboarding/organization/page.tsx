@@ -120,7 +120,7 @@ export default function OrganizationForm({
         await authClient.organization.create({ name, slug });
 
         // After creating the organization, create the tenant
-        const createTenantRes = await fetch("/api/create-tenant", {
+        const createTenantRes = await fetch("/api/internal/tenant", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

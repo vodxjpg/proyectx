@@ -85,4 +85,22 @@ export const auth = betterAuth({
     }),
     nextCookies(),
   ],
+
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // NEW: databaseHooks to unset the active org ID when session is destroyed
+  databaseHooks: {
+    session: {
+      destroy: {
+        before: async (session, request) => {
+          // Force activeOrganizationId to null so it doesn't linger
+          session.activeOrganizationId = null;
+          // Return updated session so the library knows to handle it
+          return {
+            data: session,
+          };
+        },
+      },
+    },
+  },
+  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 });

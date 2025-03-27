@@ -156,30 +156,41 @@ export async function POST(request: NextRequest) {
 
     const hasSupportEmail = supportEmailCount.count > 0;
 
+    // After checking platforms, support email, and secret phrase in step 8
+    const countriesCount = await db
+    .selectFrom("organization_countries")
+    .select(db.fn.countAll<number>().as("count"))
+    .where("organizationId", "=", organizationId) // Ensure organizationId is available from the request body
+    .executeTakeFirstOrThrow();
+
+    const hasCountriesSelected = countriesCount.count > 0;
+
     console.log("[DEBUG] Onboarding Check:", {
-      tenantId: updatedTenant.id,
-      hasAtLeastOnePlatform,
-      hasSupportEmail,
-      hasSecretPhrase,
-      currentOnboardingCompleted: updatedTenant.onboardingCompleted,
+    tenantId: updatedTenant.id,
+    hasAtLeastOnePlatform,
+    hasSupportEmail,
+    hasSecretPhrase,
+    hasCountriesSelected,
+    currentOnboardingCompleted: updatedTenant.onboardingCompleted,
     });
 
-    // 9) If not already marked completed, and all conditions are met => set onboardingCompleted=1
+    // Step 9: Update the condition
     if (
-      !updatedTenant.onboardingCompleted &&
-      hasAtLeastOnePlatform &&
-      hasSupportEmail &&
-      hasSecretPhrase
+    !updatedTenant.onboardingCompleted &&
+    hasAtLeastOnePlatform &&
+    hasSupportEmail &&
+    hasSecretPhrase &&
+    hasCountriesSelected
     ) {
-      console.log("[DEBUG] Onboarding: Marking tenant as completed:", updatedTenant.id);
-      await db
-        .updateTable("tenant")
-        .set({ onboardingCompleted: 1, updatedAt: now })
-        .where("id", "=", tenant.id)
-        .execute();
-      console.log("[DEBUG] Onboarding: Tenant onboarding completed:", tenant.id);
+    console.log("[DEBUG] Onboarding: Marking tenant as completed:", updatedTenant.id);
+    await db
+      .updateTable("tenant")
+      .set({ onboardingCompleted: 1, updatedAt: now })
+      .where("id", "=", tenant.id)
+      .execute();
+    console.log("[DEBUG] Onboarding: Tenant onboarding completed:", tenant.id);
     } else {
-      console.log("[DEBUG] Onboarding: Conditions not met or already completed. Doing nothing.");
+    console.log("[DEBUG] Onboarding: Conditions not met or already completed. Doing nothing.");
     }
 
     return NextResponse.json({ success: true });

@@ -1,16 +1,22 @@
 {
   "pages": {
-    "/signup/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/signup/page.css",
-      "static/chunks/app/signup/page.js"
+      "static/css/app/page.css",
+      "static/chunks/app/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
+    ],
+    "/signup/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/signup/page.css",
+      "static/chunks/app/signup/page.js"
     ],
     "/dashboard/page": [
       "static/chunks/webpack.js",
@@ -22,17 +28,16 @@
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/layout.js"
     ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/page.css",
-      "static/chunks/app/page.js"
-    ],
     "/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/login/page.css",
       "static/chunks/app/login/page.js"
+    ],
+    "/select-organization/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/select-organization/page.js"
     ],
     "/onboarding/organization/page": [
       "static/chunks/webpack.js",
@@ -49,6 +54,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/onboarding/bot-keys/page.js"
     ],
+    "/onboarding/selling-countries/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/onboarding/selling-countries/page.js"
+    ],
     "/onboarding/support-email/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -58,17 +68,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/onboarding/secret-phrase/page.js"
-    ],
-    "/select-organization/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/select-organization/page.js"
-    ],
-    "/forgot-password/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/forgot-password/page.css",
-      "static/chunks/app/forgot-password/page.js"
     ],
     "/organizations/page": [
       "static/chunks/webpack.js",
@@ -101,10 +100,45 @@
       "static/chunks/main-app.js",
       "static/chunks/app/set-password/page.js"
     ],
-    "/_not-found/page": [
+    "/settings/general/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/settings/general/page.js"
+    ],
+    "/settings/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/settings/layout.js"
+    ],
+    "/product-attributes/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/product-attributes/page.js"
+    ],
+    "/product-attributes/[attributeId]/terms/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/product-attributes/[attributeId]/terms/page.js"
+    ],
+    "/products/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/products/page.js"
+    ],
+    "/products/new/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/products/new/page.js"
+    ],
+    "/product-categories/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/product-categories/page.js"
+    ],
+    "/products/[productId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/products/[productId]/page.js"
     ]
   }
 }

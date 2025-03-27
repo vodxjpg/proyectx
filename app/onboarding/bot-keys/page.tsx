@@ -73,7 +73,7 @@ export default function TelegramApiForm() {
       }
 
       // On success, go to the next onboarding step.
-      router.push("/onboarding/support-email");
+      router.push("/onboarding/selling-countries");
     } catch (error) {
       console.error("Error submitting API key:", error);
     } finally {

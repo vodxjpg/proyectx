@@ -1,8 +1,16 @@
 // /home/zodx/Desktop/proyectx/utils/db.ts
+
 import path from "path";
 import { Kysely, SqliteDialect } from "kysely";
 import Database from "better-sqlite3";
 
+/**
+ * ---------------------------------------------
+ * TABLE INTERFACES
+ * ---------------------------------------------
+ */
+
+// -------------- Basic Auth / Platform Tables --------------
 interface UserTable {
   id: string;
   name: string;
@@ -110,6 +118,16 @@ interface JWKSTable {
   createdAt: string;
 }
 
+interface OrganizationCountriesTable {
+  id: string;
+  organizationId: string;
+  countryCode: string;
+  logistics_group: number | null; // Bigint stored as INTEGER in SQLite
+  support_group: number | null;   // Bigint stored as INTEGER in SQLite
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface OrganizationSupportEmailTable {
   id: string;
   organizationId: string;
@@ -119,6 +137,104 @@ interface OrganizationSupportEmailTable {
   updatedAt: string;
 }
 
+interface ProductCategoryTable {
+  id: string;
+  name: string;
+  image: string | null;
+  slug: string;
+  organizationId: string;
+  parentId: string | null;
+}
+
+// -------------- Product & E-commerce Tables --------------
+interface ProductAttributeTable {
+  id: string;
+  name: string;
+  slug: string;
+  organizationId: string;
+}
+
+interface ProductAttributeTermTable {
+  id: string;
+  attributeId: string;
+  name: string;
+  slug: string;
+  organizationId: string;
+}
+
+interface ProductAttributeAssignmentTable {
+  id: string;
+  productId: string;
+  attributeId: string;
+  usedForVariation: number; // 0 or 1
+  organizationId: string;
+}
+
+interface ProductTermTable {
+  id: string;
+  productId: string;
+  attributeId: string;
+  termId: string;
+  organizationId: string;
+}
+
+interface ProductVariantTermTable {
+  id: string;
+  variantId: string;
+  attributeId: string;
+  termId: string;
+  organizationId: string;
+}
+
+interface ProductStockTable {
+  id: string;
+  variantId: string;  // references product_variants(id)
+  countryCode: string;
+  stockLevel: number;
+  visibility: number;     // 0 or 1
+  manageStock: number;    // 0 or 1
+  allowBackorder: number; // 0 or 1
+  organizationId: string;
+}
+
+/** 
+ * NEW IMAGE COLUMN:
+ *  - Add `imageURL?: string | null;` to ProductTable
+ *  - Add `imageURL?: string | null;` to ProductVariantTable
+ */
+interface ProductTable {
+  id: string;
+  organizationId: string;
+  name: string;
+  description: string;
+  type: 'simple' | 'variable';
+  sku: string | null;
+  price: number | null;
+  status: 'draft' | 'published' | 'archived';
+  createdAt: string;
+  updatedAt: string;
+  imageURL?: string | null; // <--- NEW column
+}
+
+interface ProductVariantTable {
+  id: string;
+  productId: string;
+  organizationId: string;
+  sku: string;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
+  imageURL?: string | null; // <--- NEW column
+}
+
+interface ProductCategoryAssignmentTable {
+  id: string;
+  productId: string;
+  categoryId: string;
+  organizationId: string;
+}
+
+// -------------- COMBINED SCHEMA for Kysely --------------
 interface DatabaseSchema {
   user: UserTable;
   session: SessionTable;
@@ -127,10 +243,22 @@ interface DatabaseSchema {
   tenant: TenantTable;
   tenant_platforms: TenantPlatformTable;
   organization: OrganizationTable;
+  organization_support_email: OrganizationSupportEmailTable;
+  organization_countries: OrganizationCountriesTable;
   member: MemberTable;
   invitation: InvitationTable;
   jwks: JWKSTable;
-  organization_support_email: OrganizationSupportEmailTable;
+
+  product_categories: ProductCategoryTable;
+  product_attributes: ProductAttributeTable;
+  product_attribute_terms: ProductAttributeTermTable;
+  product_attribute_assignments: ProductAttributeAssignmentTable;
+  product: ProductTable;
+  product_variants: ProductVariantTable;
+  product_category_assignments: ProductCategoryAssignmentTable;
+  product_term: ProductTermTable;
+  product_variant_terms: ProductVariantTermTable;
+  product_stock: ProductStockTable;
 }
 
 // IMPORTANT: Always use an absolute path so that both

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import {
   ChevronDown,
   Cpu,
@@ -48,7 +49,7 @@ const Two = () => {
       label: "Products",
       subMenus: [
         {
-          title: "DX Platform",
+          title: "View all products",
           items: [
             {
               label: "Previews",
@@ -218,8 +219,8 @@ const Two = () => {
     },
     {
       id: 4,
-      label: "Organization",
-      link: "#",
+      label: "Organizations",
+      link: "/organizations",
     },
     {
       id: 5,
@@ -237,97 +238,106 @@ const Two = () => {
   const [isHover, setIsHover] = useState<number | null>(null);
   return (
     <div className="relative flex flex-row justify-between items-center">
-        <div className="flex items-center justify-between px-4 py-3">
-            <Logo width={120} height={40} alt="My Company Logo" />
-        {/* Hamburger or menu button */}
-        </div>
-        <ul className="relative flex items-center space-x-0">
+      <div className="flex items-center justify-between px-4 py-3">
+        <Logo width={120} height={40} alt="My Company Logo" />
+      </div>
+      <ul className="relative flex items-center space-x-0">
         {NAV_ITEMS.map((navItem) => (
-            <li
+          <li
             key={navItem.label}
             className="relative"
             onMouseEnter={() => handleHover(navItem.label)}
             onMouseLeave={() => handleHover(null)}
-            >
-            <button
+          >
+            {navItem.link ? (
+              <Link
+                href={navItem.link}
+                className="text-sm py-1.5 px-4 flex cursor-pointer group transition-colors duration-300 items-center justify-center gap-1 text-black/50 hover:text-black relative"
+              >
+                <span>{navItem.label}</span>
+                {(isHover === navItem.id || openMenu === navItem.label) && (
+                  <motion.div
+                    layoutId="hover-bg"
+                    className="absolute inset-0 size-full bg-white/10"
+                    style={{ borderRadius: 99 }}
+                  />
+                )}
+              </Link>
+            ) : (
+              <button
                 className="text-sm py-1.5 px-4 flex cursor-pointer group transition-colors duration-300 items-center justify-center gap-1 text-black/50 hover:text-black relative"
                 onMouseEnter={() => setIsHover(navItem.id)}
                 onMouseLeave={() => setIsHover(null)}
-            >
+              >
                 <span>{navItem.label}</span>
                 {navItem.subMenus && (
-                <ChevronDown
+                  <ChevronDown
                     className={`h-4 w-4 group-hover:rotate-180 duration-300 transition-transform
-                    ${openMenu === navItem.label ? "rotate-180" : ""}
-                    `}
-                />
+                      ${openMenu === navItem.label ? "rotate-180" : ""}`}
+                  />
                 )}
                 {(isHover === navItem.id || openMenu === navItem.label) && (
-                <motion.div
+                  <motion.div
                     layoutId="hover-bg"
                     className="absolute inset-0 size-full bg-white/10"
-                    style={{
-                    borderRadius: 99,
-                    }}
-                />
+                    style={{ borderRadius: 99 }}
+                  />
                 )}
-            </button>
+              </button>
+            )}
 
             <AnimatePresence>
-                {openMenu === navItem.label && navItem.subMenus && (
+              {openMenu === navItem.label && navItem.subMenus && (
                 <div className="w-auto absolute left-0 top-full pt-2 z-50">
-                    <motion.div
+                  <motion.div
                     className="bg-[#FFF] border border-black/1 p-4 w-max"
-                    style={{
-                        borderRadius: 16,
-                    }}
+                    style={{ borderRadius: 16 }}
                     layoutId="menu"
-                    >
+                  >
                     <div className="w-fit shrink-0 flex space-x-9 overflow-hidden bg-white">
-                        {navItem.subMenus.map((sub) => (
+                      {navItem.subMenus.map((sub) => (
                         <motion.div layout className="w-full" key={sub.title}>
-                            <h3 className="mb-4 text-sm font-medium capitalize text-black/50">
+                          <h3 className="mb-4 text-sm font-medium capitalize text-black/50">
                             {sub.title}
-                            </h3>
-                            <ul className="space-y-6">
+                          </h3>
+                          <ul className="space-y-6">
                             {sub.items.map((item) => {
-                                const Icon = item.icon;
-                                return (
+                              const Icon = item.icon;
+                              return (
                                 <li key={item.label}>
-                                    <a
+                                  <a
                                     href="#"
                                     className="flex items-start space-x-3 group"
-                                    >
+                                  >
                                     <div className="border border-white/30 text-black rounded-md flex items-center justify-center size-9 shrink-0 group-hover:bg-white group-hover:text-[#0A0A0A] transition-colors duration-300">
-                                        <Icon className="h-5 w-5 flex-none" />
+                                      <Icon className="h-5 w-5 flex-none" />
                                     </div>
                                     <div className="leading-5 w-max">
-                                        <p className="text-sm font-medium text-black shrink-0">
+                                      <p className="text-sm font-medium text-black shrink-0">
                                         {item.label}
-                                        </p>
-                                        <p className="text-xs text-black/50 shrink-0 group-hover:text-black transition-colors duration-300">
+                                      </p>
+                                      <p className="text-xs text-black/50 shrink-0 group-hover:text-black transition-colors duration-300">
                                         {item.description}
-                                        </p>
+                                      </p>
                                     </div>
-                                    </a>
+                                  </a>
                                 </li>
-                                );
+                              );
                             })}
-                            </ul>
+                          </ul>
                         </motion.div>
-                        ))}
+                      ))}
                     </div>
-                    </motion.div>
+                  </motion.div>
                 </div>
-                )}
+              )}
             </AnimatePresence>
-            </li>
+          </li>
         ))}
-        </ul>
-        <div className="flex items-center justify-between px-4 py-3">
-          <UserProfile />
-        {/* Hamburger or menu button */}
-        </div>
+      </ul>
+      <div className="flex items-center justify-between px-4 py-3">
+        <UserProfile />
+      </div>
     </div>
   );
 };

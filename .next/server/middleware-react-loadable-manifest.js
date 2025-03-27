@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{}"
+self.__REACT_LOADABLE_MANIFEST="{\"components/layout/EditorWrapper.tsx -> ./QuillEditor\":{\"id\":\"components/layout/EditorWrapper.tsx -> ./QuillEditor\",\"files\":[\"static/css/_app-pages-browser_components_layout_QuillEditor_tsx.css\",\"static/chunks/_app-pages-browser_components_layout_QuillEditor_tsx.js\"]}}"

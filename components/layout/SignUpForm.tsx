@@ -94,7 +94,7 @@ export default function SignUpForm() {
     setLoading(true);
     try {
       // Check if email already exists
-      const userCheck = await fetch(`/api/check-user?email=${encodeURIComponent(normalizedEmail)}`, {
+      const userCheck = await fetch(`/api/user/check?email=${encodeURIComponent(normalizedEmail)}`, {
         method: "GET",
       });
 

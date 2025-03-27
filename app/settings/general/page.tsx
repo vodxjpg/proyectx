@@ -91,7 +91,7 @@ export default function GeneralSettings() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await fetch("/api/internal/user", {
+        const res = await fetch("/api/user", {
           headers: {
             "x-internal-token": internalToken,
           },

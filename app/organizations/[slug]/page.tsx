@@ -21,9 +21,12 @@ import {
   TextInput,
 } from "@tremor/react";
 import { authClient } from "@/utils/auth-client";
+import { Copy } from "lucide-react";
 
 export default function OrganizationDetails() {
   const { slug } = useParams();
+
+  const [copied, setCopied] = useState(false);
 
   // --- Organization + membership state
   const [organization, setOrganization] = useState(null);
@@ -266,6 +269,19 @@ export default function OrganizationDetails() {
     <div className="p-4 sm:mx-auto sm:max-w-6xl py-8">
       <h3 className="text-tremor-title font-bold text-tremor-content-strong dark:text-dark-tremor-content-strong">
         {organization.name}
+        <span className="ml-2 text-sm text-gray-500">({organization.id})</span>
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(organization.id);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+          }}
+          className="ml-2 text-gray-500 hover:text-gray-700"
+          title="Copy ID to clipboard"
+        >
+          <Copy size={16} />
+        </button>
+        {copied && <span className="ml-2 text-green-500 text-sm">Copied!</span>}
       </h3>
       <p className="mt-2 text-tremor-default leading-6 text-tremor-content dark:text-dark-tremor-content">
         Manage your organization members and invitations.
